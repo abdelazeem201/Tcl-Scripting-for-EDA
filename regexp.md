@@ -30,13 +30,13 @@ Match found!
 
 ### Capturing Groups
 ```tcl
-set text "Name: Alice"
+set text "Name: Ahmed"
 regexp {Name: (\w+)} $text match name
 puts "Extracted Name: $name"
 ```
 **Output:**
 ```
-Extracted Name: Alice
+Extracted Name: Ahmed
 ```
 
 ### Matching Numbers
@@ -96,13 +96,13 @@ Price: # USD, Discount: # USD
 
 ### Swapping First and Last Name
 ```tcl
-set name "Alice Johnson"
+set name "Ahmed Johnson"
 regsub {(\w+) (\w+)} $name "\2, \1" newName
 puts $newName
 ```
 **Output:**
 ```
-Johnson, Alice
+Johnson, Ahmed
 ```
 
 ---
@@ -193,7 +193,7 @@ Here are some frequently used regex patterns with explanations:
 |---------|------------|---------------|
 | `.` | Any character except newline | "a", "7", "@" |
 | `\d` | Digit (0-9) | "5", "9" |
-| `\w` | Word character (A-Z, a-z, 0-9, _) | "Alice", "hello123" |
+| `\w` | Word character (A-Z, a-z, 0-9, _) | "Ahmed", "hello123" |
 | `\s` | Whitespace (space, tab, newline) | " " |
 | `\D` | Not a digit | "A", "hello" |
 | `\W` | Not a word character | "@", "#" |
