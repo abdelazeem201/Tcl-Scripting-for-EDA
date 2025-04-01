@@ -96,13 +96,13 @@ Price: # USD, Discount: # USD
 
 ### Swapping First and Last Name
 ```tcl
-set name "Ahmed Johnson"
+set name "Ahmed Abdelazeem"
 regsub {(\w+) (\w+)} $name "\2, \1" newName
 puts $newName
 ```
 **Output:**
 ```
-Johnson, Ahmed
+Abdelazeem, Ahmed
 ```
 
 ---
