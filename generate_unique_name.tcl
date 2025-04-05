@@ -1,5 +1,5 @@
 # Problem statements
-  # 1. 	•	Write a tcl proc, to take a “base name” and optionally a “suffix” and create a unique name from this base name.
+        # 1.  • Write a tcl proc, to take a “base name” and optionally a “suffix” and create a unique name from this base name.
 	# 2.  •	You should create the unique name by adding a prefix counter, then base name, then optionally a suffix if it exists. (i.e. 19_basename_suffix)
 	# 3.  •	But we can’t start a variable name by a number, lets add letter “n” as prefix as well to be "n19_basename_suffix"
 	# 4.  •	If the base name is already created by the above pattern, please remove the old prefix counter, for example if the  is n19_basename, remove n19 and add the new prefix. (i.e. n20_basename)
