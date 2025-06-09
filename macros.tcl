@@ -16,7 +16,7 @@ set fw [open "macro.tcl" a]
 foreach macro [get_object_name [get_cells -design [current_blocks] -hierarchical -filter "is_hard_macro == true"]] {
 
     # Get attributes: orgin, bbox and orientation
-    set orgin  [get_attribute $macro orgin]
+    set origin  [get_attribute $macro origin]
     set bbox  [get_attribute $macro bbox]
     set orient [get_attribute $macro orientation]
 
