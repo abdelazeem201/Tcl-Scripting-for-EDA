@@ -1,3 +1,12 @@
+# Convert a collection into a list
+proc collection_to_list {a_collection} {
+    set my_list {}
+    foreach_in_collection item $a_collection {
+        lappend my_list [get_object_name $item]
+    }
+    return $my_list
+}
+
 # Procedure to find the maximum and minimum net length in the design
 proc get_max_min_net_length {} {
     # Get all hierarchical net full names
