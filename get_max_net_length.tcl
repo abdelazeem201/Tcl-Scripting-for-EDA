@@ -1,6 +1,15 @@
 #!/bin/tclsh8.5
 #Longest Net
 
+# Convert a collection into a list
+proc collection_to_list {a_collection} {
+    set my_list {}
+    foreach_in_collection item $a_collection {
+        lappend my_list [get_object_name $item]
+    }
+    return $my_list
+}
+
 # Define a procedure to get the net with the maximum length in the design
 proc get_max_net_length {} {
     # Get the list of all nets in the design by name
