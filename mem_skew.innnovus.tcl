@@ -1,3 +1,71 @@
+##Problem
+
+#I want to set clock latencies for RAM macros. What information can I get to determine which RAM instance is a good candidate for skewing? This is required to determine if I can improve my overall timing by analyzing the balancing of timing paths going to and from the RAM macro.
+
+
+#Solution
+#
+#The attached script analyzes all timing paths to and from the macro and determines the WNS and TNS of those paths, respectively.
+#
+#If the paths into the RAM have mostly negative slack and the paths from the RAM have mostly positive slack, you can improve timing by pushing out the clock timing of the RAM clock. Else, if the paths into the RAM have mostly positive slack and the paths from the RAM have mostly negative slack, you can then improve the timing by pulling in the clock timing of the RAM clock. If the paths both into and from the RAM have negative slack, you cannot improve timing by skewing the clock.
+#
+#In the Tcl proc, you gather the most negative paths to and from the RAM (WNS). You also add up all negative paths to and from the RAM into a total negative slack number (TNS). The Tcl proc has a few command-line options to customize and simplify usage.
+#
+#The Tcl proc is written for a testcase where the RAM macros did not provide the is_macro_cell or is_memory_cell. So, a heuristic way is used. You check if the name of the lib_cell contains *ram* and if the instance has more than 20 pins. As needed, this can be changed in the code.
+
+#Usage:
+
+#innovus 14> mem_skew -help
+#Description:
+#analyze mem tns wns
+#Usage: mem_skew [-help] [-inst_mask <string>] [-neg_only] [-ref_lib_mask <string>]
+#-help                   # Prints out the command usage
+#-inst_mask <string>     # Instances to analyze. Default * (string, optional)
+#-neg_only               # Only print negative slack. Default False (bool, optional)
+#-ref_lib_mask <string>  # Name mask to find rams by ref_lib_cell_name. Default *ram* (string, optional)
+
+#Sample Output:
+
+#This is the basic functionality to show all RAMs with their from/to WNS and TNS.
+
+#innovus > mem_skew                                                                                  
+
+#-----------------------------------------------------------------------------------------------------
+#| WNS from | TNS from |  WNS to  |  TNS to  | Instance name                                       
+#|---------------------------------------------------------------------------------------------------
+#|   +0.033 |   +0.000 |   +3.414 |   +0.000 | u_dig/top/u_buf/u_buf1_i
+#|   +0.044 |   +0.000 |   +3.403 |   +0.000 | u_dig/top/u_buf/u_buf1_o
+#|   +0.029 |   +0.000 |   +3.391 |   +0.000 | u_dig/top/u_buf/u_buf2_i
+#|   +0.345 |   +0.000 |   +2.408 |   +0.000 | u_dig/top/u_buf/u_buf2_o
+#|   +0.006 |   +0.000 |   +3.625 |   +0.000 | u_dig/top/u_buf/u_buf3_i
+#|   +0.057 |   +0.000 |   +3.966 |   +0.000 | u_dig/top/u_buf/u_buf3_o
+#|   +0.011 |   +0.000 |   +1.606 |   +0.000 | u_stats/u_accum/u_stats1/u_ram
+#|   -0.028 |   -0.208 |   +1.752 |   +0.000 | u_stats/u_accum/u_stats2/u_ram
+#|   +0.016 |   +0.000 |   +1.200 |   +0.000 | u_stats/u_accum/u_stats3/u_ram
+#|   -0.017 |   -0.069 |   +0.964 |   +0.000 | u_stats/u_accum/u_stats4/u_ram
+#-----------------------------------------------------------------------------------------------------
+
+#For skew analysis, only RAMs with negative slack are relevant. So, you add the flag to only show the RAMs with negative slack.
+
+#innovus > mem_skew -neg_only
+
+#-----------------------------------------------------------------------------------------------------
+#| WNS from | TNS from |  WNS to  |  TNS to  | Instance name                                       
+#|---------------------------------------------------------------------------------------------------
+#
+#|   -0.028 |   -0.208 |   +1.752 |   +0.000 | u_stats/u_accum/u_stats2/u_ram
+#|   -0.017 |   -0.069 |   +0.964 |   +0.000 | u_stats/u_accum/u_stats4/u_ram
+#-----------------------------------------------------------------------------------------------------
+
+#If you only want a RAM with a name mask, you can filter for that as well.
+
+#innovus > mem_skew -neg_only -inst_mask u_stats/u_accum/u_stats4/*
+#-----------------------------------------------------------------------------------------------------
+#| WNS from | TNS from |  WNS to  |  TNS to  | Instance name                                         
+#|--------------------------------------------------------------------------------------------------
+#| -0.017 |   -0.069 |   +0.964 |   +0.000 | u_stats/u_accum/u_stats4/u_ram
+#-----------------------------------------------------------------------------------------------------
+
 proc sum_l {lst} {
   set sum 0.0
   foreach l $lst { set sum [ expr { $sum + $l } ] }
